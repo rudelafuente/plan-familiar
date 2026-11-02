@@ -1,5 +1,5 @@
 // VERSION must match core.js and package.json (checked by npm test).
-const VERSION='0.1.0',CACHE='plan-familiar-shell-'+VERSION;
+const VERSION='0.2.0',CACHE='plan-familiar-shell-'+VERSION;
 const ASSETS=['./','./index.html','./style.css','./app.js','./core.js','./guide.js','./storage.js','./report.js','./views.js','./manifest.webmanifest','./icon.svg','./icon-192.png','./icon-512.png'];
 // cache:'reload' bypasses the HTTP cache so a new version never stores stale files from the previous one.
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS.map(url=>new Request(url,{cache:'reload'}))))));

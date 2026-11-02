@@ -17,12 +17,13 @@ Módulos ES nativos cargados desde `index.html`:
 - `views.js`: vistas puras, `(state) → HTML`. Cualquier valor del usuario pasa por `esc()`.
 - `report.js`: ficha imprimible, autónoma y sin cifrar.
 - `app.js`: estado, DOM y eventos por delegación con atributos `data-*`. Todo guardado pasa por `save()`, y por tanto por `validate()`.
-- `storage.js`: IndexedDB `plan-familiar-v1`, registro `current` = `{revision, data}`. `write()` aborta si otra ventana ha escrito antes.
+- `storage.js`: IndexedDB `plan-familiar-v1`, registro `current` = `{revision, data}`. `write()` aborta si otra ventana ha escrito antes. Exporta `LOCAL=false`.
+- Edición local: el repo privado `plan-familiar-datos` sirve esta misma app con su propio `/storage.js` (`LOCAL=true`), que guarda en `plan.json`. Mantén las exportaciones `read`, `write` y `LOCAL` compatibles con ese módulo.
 - `sw.js`: caché del shell. `actualizar.html` es la página de rescate: borra el worker y las cachés sin tocar IndexedDB.
 
 ## Convenciones y límites
 
-- **Datos reales:** nunca van al repositorio. El código arranca vacío; no añadas nombres, teléfonos ni direcciones de la familia, ni como ejemplo.
+- **Datos reales:** nunca van a este repositorio, que puede ser público. Su sitio es `plan-familiar-datos`, que es privado. El código arranca vacío; no añadas nombres, teléfonos ni direcciones de la familia, ni como ejemplo.
 - **Documentos:** se guarda solo la fecha de vencimiento, nunca el número del DNI o del pasaporte.
 - **Red:** ninguna llamada con datos del usuario. La CSP de `index.html` solo permite recursos `self`.
 - **Pautas:** mantén el texto de `guide.js` fiel a la fuente oficial. Si lo cambias, vuelve a comprobar la fuente y actualiza `REVIEWED`. No añadas consejos propios como si fueran oficiales.

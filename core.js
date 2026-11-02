@@ -1,4 +1,4 @@
-export const VERSION='0.1.0';
+export const VERSION='0.2.0';
 // Days before a date when it starts appearing as pending. Documents need time for an appointment.
 export const WARN={dues:90,items:30};
 export const BACKUP_DAYS=180;

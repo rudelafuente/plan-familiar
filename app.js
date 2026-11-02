@@ -1,5 +1,5 @@
 import {VERSION,FIELDS,empty,today,validate,encrypt,decrypt,addStarter} from './core.js';
-import {read,write} from './storage.js';
+import {read,write,LOCAL} from './storage.js';
 import {ahora,plan,aldia,guia,ajustes,entryForm,passwordForm,fileReady} from './views.js';
 import {sheetHTML} from './report.js';
 
@@ -7,7 +7,7 @@ const $=s=>document.querySelector(s);
 const VIEWS={ahora,plan,aldia,guia,ajustes};
 let data=empty(),view='ahora',storageOK=true,offlineReady=false,pendingFile=null,restorePayload=null,afterSave=null,busy=false;
 
-function render(){$('#app').innerHTML=VIEWS[view]({data,offlineReady,storageOK,version:VERSION});}
+function render(){$('#app').innerHTML=VIEWS[view]({data,offlineReady,storageOK,version:VERSION,local:LOCAL});}
 let toastTimer;function toast(message){$('#notice').textContent=message;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#notice').textContent='',5500);}
 function modal(content){const m=$('#modal');m.innerHTML=`<button class="close" aria-label="Cerrar" data-action="close">×</button>${content}<div id="modal-error" role="alert"></div>`;if(!m.open)m.showModal();}
 const closeModal=()=>$('#modal').close();
@@ -73,7 +73,7 @@ async function init(){
   try{const stored=await read();data=stored?validate(stored):empty();}catch(e){storageOK=false;toast(e.message);}
   render();
   navigator.storage?.persist?.().catch(()=>{});
-  if(!('serviceWorker'in navigator))return;
+  if(LOCAL||!('serviceWorker'in navigator))return;
   try{const reg=await navigator.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'});const offer=()=>{if(reg.waiting&&navigator.serviceWorker.controller)showUpdate(reg);};offer();reg.addEventListener('updatefound',()=>{reg.installing?.addEventListener('statechange',offer);});await navigator.serviceWorker.ready;offlineReady=true;render();}
   catch{toast('No se ha preparado el modo sin conexión. Vuelve a abrir con internet.');}
 }

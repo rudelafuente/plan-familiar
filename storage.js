@@ -1,3 +1,4 @@
+export const LOCAL=false;
 let dbPromise,revision=null;
 function db(){return dbPromise??=new Promise((resolve,reject)=>{const req=indexedDB.open('plan-familiar-v1',1);req.onupgradeneeded=()=>req.result.createObjectStore('state');req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(Error('No se puede abrir el almacenamiento local.'));req.onblocked=()=>reject(Error('Cierra otras ventanas del plan y vuelve a abrirlo.'));});}
 export async function read(){const d=await db();return new Promise((resolve,reject)=>{const t=d.transaction('state','readonly'),r=t.objectStore('state').get('current');r.onsuccess=()=>{revision=r.result?.revision??null;resolve(r.result?.data);};r.onerror=()=>reject(r.error);});}
